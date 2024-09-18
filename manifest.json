@@ -2,7 +2,7 @@
     "name": "AI Watershed",
     "version": "1.0",
     "description": "Bringing awareness to water conservation in technology.",
-    "manifest_version": "3",
+    "manifest_version": 3,
     "action": { 
          "default_popup": "hello.html",
          "default_icon": "tutorial_pic.png"
