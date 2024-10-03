@@ -1,14 +1,14 @@
-chrome.runtime.onInstalled.addEventListener(() => { 
+chrome.runtime.onInstalled.addListener(() => { 
     chrome.action.setBadgeText({ 
         "text": "OFF",
     });
 })
 
-const extensions = "https://developer.chrome.com/docs/extensions"; 
+const chat = "https://chatgpt.com/"; 
 const webstore = "https://developer.chrome.com/docs/webstore";
 
-chrome.action.onClicked.addEventListener(async (tab) => { 
-    if (tab.url.startsWith(extensions) || tab.url.startsWith(webstore)) { 
+chrome.action.onClicked.addListener(async (tab) => { 
+    if (tab.url.startsWith(chat) || tab.url.startsWith(webstore)) { 
         const prevState = await chrome.action.getBadgeText({tabId: tab.id});
         const nextState = prevState === 'ON' ? 'OFF' : 'ON'
 
