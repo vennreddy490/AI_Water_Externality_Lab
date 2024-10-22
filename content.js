@@ -1,7 +1,8 @@
 $('body').append(`<h1> Hello World </h1>`)
-// const iconURL = document.createElement('img')
 
+// Retrieve url for image 
 iconURL = chrome.runtime.getURL("./bottle.png");
-console.log(iconURL)
+
+// Append image to DOM
 $('body').append(`<img src="${iconURL}" alt="bottle image">`)
 
