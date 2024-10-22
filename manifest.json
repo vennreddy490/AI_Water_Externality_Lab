@@ -7,7 +7,8 @@
 
     "content_scripts": [ 
         { 
-            "js": ["scripts/content.js"], 
+            "js": [ "node_modules/jquery/dist/jquery.min.js",
+                    "./content.js" ], 
             "matches": [
                 "https://developer.chrome.com/docs/extensions/*",
                 "https://developer.chrome.com/docs/webstore/*",
@@ -18,10 +19,12 @@
     ],
     "background": { 
         "service_worker": "background.js"
+
     }, 
 
     "permissions": ["activeTab", "scripting"], 
     
+    "host_permissions": ["*://*/*"],
 
 
     "icons": {
@@ -29,5 +32,14 @@
           "32": "images/icon-32.png",
           "48": "images/icon-48.png",
           "128": "images/icon-128.png"
-    }
+    },
+
+    "web_accessible_resources": [
+        { 
+            "resources": ["bottle.png"],
+            "matches": ["<all_urls>"]
+            
+        }
+    ]
+
 }
