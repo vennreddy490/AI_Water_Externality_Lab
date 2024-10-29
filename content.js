@@ -4,5 +4,5 @@ $('body').append(`<h1> Hello World </h1>`)
 iconURL = chrome.runtime.getURL("./bottle.png");
 
 // Append image to DOM
-$('body').append(`<img src="${iconURL}" alt="bottle image">`)
-
+$('body').prepend(`<img class="bottle-img" src="${iconURL}" alt="bottle image">`)
+$('.bottle-img').css('mix-blend-mode', 'multiply')
