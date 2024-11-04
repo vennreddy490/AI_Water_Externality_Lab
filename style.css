@@ -1,11 +1,9 @@
-.bottle-img { 
-    mix-blend-mode: multiply;
-}
+
 
 body > div.relative.flex.h-full.w-full.overflow-hidden.transition-colors.z-0 { 
-    border: 6px red solid !important;
+    border: 6px green solid !important;
 }
 
-body > div.relative.flex.h-full.w-full.overflow-hidden.transition-colors.z-0 > div:nth-child(1) > div > div > div > nav { 
+/* body > div.relative.flex.h-full.w-full.overflow-hidden.transition-colors.z-0 > div:nth-child(1) > div > div > div > nav { 
     background-color: red !important; 
-}
+} */
