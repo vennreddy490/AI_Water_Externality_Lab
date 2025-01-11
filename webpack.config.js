@@ -19,10 +19,20 @@ export default {
       template: './src/index.html'
     }),
     new CopyPlugin({
-      patterns: [{
-        from: path.resolve('manifest.json'),
-        to: path.resolve('dist')
-      }]
+      patterns: [
+        {
+          from: path.resolve('manifest.json'),
+          to: path.resolve('dist'),
+        }, 
+        {
+          from: path.resolve('./assets'), // Assuming 'assets' is under 'src'
+          to: path.resolve('dist/assets'), // Copy assets to the dist folder
+          noErrorOnMissing: true 
+        }
+        // from: path.resolve('./assets'), // Assuming 'assets' is under 'src'
+        // to: path.resolve('dist/assets'), // Copy assets to the dist folder
+        // noErrorOnMissing: true 
+      ]
     })
   ],
   module: {

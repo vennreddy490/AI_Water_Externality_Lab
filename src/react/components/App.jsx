@@ -5,8 +5,9 @@ const App = () => {
 
   const getRandomUser = async () => {
     // Get users
+    // for some reason this api isnt working, trying to find out why 
     const resp = await fetch('https://jsonplaceholder.typicode.com/users');
-    const users = await resp.json();
+    const users = await resp.json(); 
     // Get email
     const randomEmail = users[Math.floor(Math.random() * users.length)].email;
     // Get active tab
