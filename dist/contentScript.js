@@ -1,1 +1,0 @@
-(()=>{"use strict";chrome.runtime.onMessage.addListener((function(e,o,t){var n=document.createElement("h1"),c=document.createTextNode("Please contact: ".concat(e));n.appendChild(c),document.body.appendChild(n),t("Looks good to me bro!")}))})();
