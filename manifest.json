@@ -1,17 +1,25 @@
 {
     "name": "GPT Extension",
-    "description": "AI Water Externality Lab Extension",
+    "description": "Test Extension SRT",
     "version": "1.0",
     "manifest_version": 3,
+    "permissions": ["webRequest"],
     "action": {
-        "default_popup": "extension.html",
         "default_icon": "images/icon.png"
     },
+    "background": {
+        "service_worker": "scripts/httpHandler.js"
+    },
+    "host_permissions": [
+        "https://chatgpt.com/backend-api/*/r", 
+        "https://chatgpt.com/backend-api/conversation/init", 
+        "https://chatgpt.com/backend-api/conversation/*-*-*"
+    ],
     "content_scripts": [
         {
             "js": ["scripts/script.js"],
             "matches": [
-                "https://chat.openai.com/*"
+                "https://chatgpt.com/*"
             ]
         }
     ]
