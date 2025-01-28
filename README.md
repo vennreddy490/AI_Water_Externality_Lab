@@ -1,1 +1,1 @@
-Git repo is being destroyed and reconstructed - Venn
+Git repo was reworked, now working from this checkpoint. Can modify the dom successfully to display the gif, although it is very rough. Will work on smoothing out animation and integration with query timing. 
