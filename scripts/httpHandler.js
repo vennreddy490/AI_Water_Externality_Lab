@@ -72,5 +72,25 @@ chrome.runtime.onMessage.addListener(
             }, 
             { urls: ["https://chatgpt.com/backend-api/*/r"] } // Target API endpoint for prompt responses
         );
+
+        // This listener waits for a message from the content script
+        // The content script will send a message when the ChatGPT page is loaded
+        chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+            
+            // Check if the action in the message is 'openPopup'
+            if (message.action === "openPopup") {
+                
+                // If the action is 'openPopup', create a new popup window
+                // The popup will open the extension.html file
+                // Set the width and height of the popup
+                chrome.windows.create({
+                    url: chrome.runtime.getURL("extension.html"), // Get the URL of the extension's HTML page
+                    type: "popup", // Type of window to create (popup)
+                    width: 100, // Width of the popup window
+                    height: 100 // Height of the popup window
+                });
+            }
+        });
+
     }
 );

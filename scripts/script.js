@@ -31,7 +31,7 @@ const PAUSE_SCRIPT = (delayTime) => new Promise((resolve, reject) => setTimeout(
 // Event listener for the window load event
 window.addEventListener('load', async (e) => {
     // Notify the background script that the page has loaded
-    await chrome.runtime.sendMessage({});
+    await chrome.runtime.sendMessage({ action: "openPopup" });
 
     // Initialize the extension functionality
     await START_FUNC(window.document.URL);

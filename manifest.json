@@ -3,8 +3,9 @@
     "description": "Test Extension SRT",
     "version": "1.0",
     "manifest_version": 3,
-    "permissions": ["webRequest"],
+    "permissions": ["webRequest", "tabs"],
     "action": {
+        "default_popup": "extension.html",
         "default_icon": "images/icon.png"
     },
     "background": {
