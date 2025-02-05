@@ -64,6 +64,13 @@ chrome.runtime.onConnect.addListener(
                     logFile += '\n\nUser Query: \n' + prompt + '\n\nChatGPT Response: \n' + newMessage; + '\n\n';
                 
                     console.log(logFile);
+
+                    //counter logic
+                    let counterElement = document.getElementById("counter");
+                    let count = localStorage.getItem("bottleCount") ? parseInt(localStorage.getItem("bottleCount")) : 0;
+                    count++; // Increment the counter
+                    counterElement.innerText = count;
+                    localStorage.setItem("bottleCount", count);
                 } else if (msg.newConvo || msg.existingConvo) {
                     // Reinitialize the extension for new or existing conversations
                     await START_FUNC(window.document.URL);
