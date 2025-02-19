@@ -1,6 +1,7 @@
 /* Configuration for GIF display */
 const GIF_DISPLAY_TIME = 3.5; // Time in seconds to display the GIF
 const IMAGE_URL = 'https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExN2x1YjV4b2R6dWVua2Y5OHFpZDFjNnFyc2xueXRvMDF6c3RtbTY5NCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/MagjwsUK2vunGimNXT/giphy.gif'; // URL for the GIF
+const MESSAGE_ROLE_SELECTOR = "[data-message-author-role]"; 
 
 /* Date and time formatter for logs */
 const TIME_CONVERTER = new Intl.DateTimeFormat('en-US', {
