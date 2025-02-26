@@ -114,9 +114,9 @@ function createQueryCounter() {
     counterDiv.appendChild(totalQueryLength);
     counterDiv.appendChild(document.createElement("br"));
 
-    // Create text for "Average Response Length: ___"
+    // Create text for "Total Response Length: ___"
     const avgResponseLength = document.createElement("p");
-    avgResponseLength.innerText = "Average Response Length: ";
+    avgResponseLength.innerText = "Total Response Length: ";
     counterDiv.appendChild(avgResponseLength);
 
     document.body.appendChild(counterDiv);
