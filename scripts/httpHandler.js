@@ -41,7 +41,7 @@ chrome.runtime.onMessage.addListener(
                 if (e.statusCode < 400 && Math.abs(previousTimeStamp - e.timeStamp) > 1000) {
                     console.log(e);
                     // Notify content script of a new conversation
-                    await port.postMessage({ newConvo: true });
+                    //await port.postMessage({ newConvo: true });
                 }
 
                 // Update the timestamp of the last request
