@@ -34,9 +34,9 @@ function createQueryCounter() {
 
     // Adjusted styles:
     counterDiv.style.position = "fixed";
-    counterDiv.style.top = "60px"; // Starts a bit lower than before
+    counterDiv.style.top = "340px"; // Starts a bit lower than before
     counterDiv.style.right = "20px";
-    counterDiv.style.height = "calc(100vh - 60px - 100px)"; // Leaves 100px at bottom
+    counterDiv.style.height = "400px"; // Leaves 100px at bottom
     counterDiv.style.width = "250px"; // Optional: set a width if needed
     counterDiv.style.zIndex = "999999";
     counterDiv.style.background = "#ADD8E6"; // Light light blue background
@@ -46,6 +46,28 @@ function createQueryCounter() {
     counterDiv.style.borderRadius = "10px"; // Curved borders
     counterDiv.style.fontSize = "14px";
     counterDiv.style.cursor = "default";
+
+    // Create a close button
+    const closeButton = document.createElement("button");
+    closeButton.innerText = "X";
+    closeButton.style.position = "absolute";
+    closeButton.style.top = "5px";
+    closeButton.style.right = "10px";
+    closeButton.style.background = "red";
+    closeButton.style.color = "white";
+    closeButton.style.border = "none";
+    closeButton.style.cursor = "pointer";
+    closeButton.style.padding = "5px 10px";
+    closeButton.style.fontSize = "14px";
+    closeButton.style.borderRadius = "5px";
+
+    // Add click event to close the counter
+    closeButton.addEventListener("click", () => {
+      counterDiv.remove();
+    });
+
+    counterDiv.appendChild(closeButton);
+
 
     // Create a header that says "Display Info"
     const header = document.createElement("h2");
@@ -91,13 +113,44 @@ function createQueryCounter() {
   }
 }
 
+//this is the button which opens the dashboard
+
+function createWaterButton() {
+  const button = document.createElement("button");
+  button.innerText = "Query Counter";
+
+  button.style.position = "fixed"; // Fix the position on the screen
+  button.style.top = "10px"; // Adjust as needed to place it at the top
+  button.style.right = "250px"; // Align to the right
+  button.style.padding = "10px 15px";
+  button.style.fontSize = "14px";
+  button.style.cursor = "pointer";
+  button.style.border = "1px solid #ccc";
+  button.style.borderRadius = "5px";
+  button.style.backgroundColor = "#008CBA";
+  button.style.color = "white";
+  button.style.zIndex = "10000"; 
+
+  button.addEventListener("click", () => {
+      createQueryCounter();
+  });
+
+  // Append the button to the body (or any other element you prefer)
+  document.body.appendChild(button);
+}
+
+
 // Event listener for the window load event
 window.addEventListener('load', async (e) => {
-  createQueryCounter();
+  //createQueryCounter();
+
+  createWaterButton();
   // Notify the background script that the page has loaded
   await chrome.runtime.sendMessage({});
   // Initialize the extension functionality
   await START_FUNC(window.document.URL);
+
+  
 });
 
 // Listener for messages from the background script
@@ -136,12 +189,14 @@ const START_FUNC = async (pageURL) => {
   logFile = ``;
   time = new Date();
 
+  
+
   // Retrieve the username element and wait until it's available
-  username = document.querySelector(`[data-testid='accounts-profile-button']`);
+  username = document.querySelector(`[data-testid='profile-button']`);
   if (username == null) {
     while (username == null) {
       await PAUSE_SCRIPT(500);
-      username = document.querySelector(`[data-testid='accounts-profile-button']`);
+      username = document.querySelector(`[data-testid='profile-button']`);
     }
   }
 
