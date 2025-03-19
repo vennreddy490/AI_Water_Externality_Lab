@@ -13,18 +13,23 @@ const TIME_CONVERTER = new Intl.DateTimeFormat('en-US', {
   second: "numeric"
 });
 
+// Persistent Variables
+const persistentCounters = {
+  queryCount: 0,
+  lastQueryLength: 0,
+  lastResponseLength: 0,
+  averageQueryLength: 0,
+  averageResponseLength: 0,
+  totalQueryLength: 0, 
+  totalResponseLength: 0
+};
+
 // Variables for tracking time, username, logs, and conversation data
 let time;
 let logFile;
 let username;
 let conversation;
 let body;
-
-// Global counter for the number of queries made and other query info
-let queryCount = 3;
-let totalQueryLength = 0;
-let totalResponseLength = 0;
-let responseCount = 0;
 
 // Utility to create delays
 const PAUSE_SCRIPT = (delayTime) => new Promise((resolve) => setTimeout(resolve, delayTime));
@@ -71,7 +76,6 @@ function createQueryCounter() {
 
     counterDiv.appendChild(closeButton);
 
-
     // Create a header that says "Display Info"
     const header = document.createElement("h2");
     header.innerText = "Display Info";
@@ -82,7 +86,7 @@ function createQueryCounter() {
 
     // Create centered text for "Queries: __"
     const queriesDisplay = document.createElement("p");
-    queriesDisplay.innerText = "Queries: 0";
+    queriesDisplay.innerText = "Queries Made: " + persistentCounters.queryCount;
     queriesDisplay.style.textAlign = "center";
     queriesDisplay.style.margin = "10px 0";
     queriesDisplay.id = "queryCountDisplay"; // For dynamic updates
@@ -90,29 +94,33 @@ function createQueryCounter() {
     counterDiv.appendChild(document.createElement("br"));
 
     // Create text for "Last Query Length: ___"
-    const lastQueryLength = document.createElement("p");
-    lastQueryLength.innerText = "Last Query Length: 0";
-    lastQueryLength.id = "lastQueryLengthDisplay"; // for dynamic updates
-    counterDiv.appendChild(lastQueryLength);
+    const lastQueryLengthDisplay = document.createElement("p");
+    lastQueryLengthDisplay.innerText = "Last Query Length: " + persistentCounters.lastQueryLength;
+    lastQueryLengthDisplay.id = "lastQueryLengthDisplay"; // for dynamic updates
+    counterDiv.appendChild(lastQueryLengthDisplay);
     counterDiv.appendChild(document.createElement("br"));
 
     // Create text for "Last Response Length: ___"
-    const lastResponseLength = document.createElement("p");
-    lastResponseLength.innerText = "Last Response Length: 0";
-    lastResponseLength.id = "lastResponseLengthDisplay"; // for dynamic updates
-    counterDiv.appendChild(lastResponseLength);
+    const lastResponseLengthDisplay = document.createElement("p");
+    lastResponseLengthDisplay.innerText = "Last Response Length: " + persistentCounters.lastResponseLength;
+    lastResponseLengthDisplay.id = "lastResponseLengthDisplay"; // for dynamic updates
+    counterDiv.appendChild(lastResponseLengthDisplay);
     counterDiv.appendChild(document.createElement("br"));
 
-    // Create text for "Total Query Length: ___"
-    const totalQueryLength = document.createElement("p");
-    totalQueryLength.innerText = "Total Query Length: 0";
-    counterDiv.appendChild(totalQueryLength);
+
+    // Create text for "Average Query Length: ____"
+    const averageQueryLengthDisplay = document.createElement("p");
+    averageQueryLengthDisplay.innerText = "Average Query Length: " + persistentCounters.averageQueryLength;
+    averageQueryLengthDisplay.id = "averageQueryLengthDisplay"; // for dynamic updates
+    counterDiv.appendChild(averageQueryLengthDisplay);
     counterDiv.appendChild(document.createElement("br"));
+
 
     // Create text for "Average Response Length: ___"
-    const avgResponseLength = document.createElement("p");
-    avgResponseLength.innerText = "Average Response Length: 0";
-    counterDiv.appendChild(avgResponseLength);
+    const averageResponseLengthDisplay = document.createElement("p");
+    averageResponseLengthDisplay.innerText = "Average Response Length: " + persistentCounters.averageResponseLength;
+    averageResponseLengthDisplay.id = "averageResponseLengthDisplay"; // for dynamic updates
+    counterDiv.appendChild(averageResponseLengthDisplay);
 
     document.body.appendChild(counterDiv);
   }
@@ -147,15 +155,11 @@ function createWaterButton() {
 
 // Event listener for the window load event
 window.addEventListener('load', async (e) => {
-  //createQueryCounter();
-
   createWaterButton();
   // Notify the background script that the page has loaded
   await chrome.runtime.sendMessage({});
   // Initialize the extension functionality
   await START_FUNC(window.document.URL);
-
-  
 });
 
 // Listener for messages from the background script
@@ -163,10 +167,10 @@ chrome.runtime.onConnect.addListener((port) => {
   port.onMessage.addListener(async (msg) => {
     if (msg.sentPrompt) {
       // When a prompt is sent, increment the query counter and update only its display element
-      queryCount++;
+      persistentCounters.queryCount++;
       const queryCountDisplay = document.getElementById("queryCountDisplay");
       if (queryCountDisplay) {
-        queryCountDisplay.innerText = "Queries: " + queryCount;
+        queryCountDisplay.innerText = "Queries Made: " + persistentCounters.queryCount;
       }
       
       // Log the timestamp and username
@@ -185,18 +189,34 @@ chrome.runtime.onConnect.addListener((port) => {
       console.log(logFile);
 
       // Calculate word counts using the countWords function
-      const promptWordCount = countWords(prompt);
-      const newMessageWordCount = countWords(newMessage);
+      persistentCounters.lastQueryLength = countWords(prompt);
+      persistentCounters.lastResponseLength = countWords(newMessage);
 
-      // Update the dashboard elements with the word counts
+      persistentCounters.totalQueryLength = persistentCounters.totalQueryLength + persistentCounters.lastQueryLength
+      persistentCounters.totalResponseLength = persistentCounters.totalResponseLength + persistentCounters.lastResponseLength
+
+      persistentCounters.averageQueryLength = persistentCounters.totalQueryLength / persistentCounters.queryCount
+      persistentCounters.averageResponseLength = persistentCounters.totalResponseLength / persistentCounters.queryCount
+
+      // Update the dashboard elements if they exist
       const lastQueryLengthDisplay = document.getElementById("lastQueryLengthDisplay");
       if (lastQueryLengthDisplay) {
-        lastQueryLengthDisplay.innerText = "Last Query Length (words): " + promptWordCount;
+        lastQueryLengthDisplay.innerText = "Last Query Length: " + persistentCounters.lastQueryLength;
       }
 
       const lastResponseLengthDisplay = document.getElementById("lastResponseLengthDisplay");
       if (lastResponseLengthDisplay) {
-        lastResponseLengthDisplay.innerText = "Last Response Length (words): " + newMessageWordCount;
+        lastResponseLengthDisplay.innerText = "Last Response Length: " + persistentCounters.lastResponseLength;
+      }
+
+      const averageQueryLengthDisplay = document.getElementById("averageQueryLengthDisplay");
+      if (averageQueryLengthDisplay) {
+        averageQueryLengthDisplay.innerText = "Average Query Length: " + persistentCounters.averageQueryLength;
+      }
+
+      const averageResponseLengthDisplay = document.getElementById("averageResponseLengthDisplay");
+      if (averageResponseLengthDisplay) {
+        averageResponseLengthDisplay.innerText = "Average Response Length: " + persistentCounters.averageResponseLength;
       }
 
     } else if (msg.newConvo || msg.existingConvo) {
@@ -212,8 +232,6 @@ const START_FUNC = async (pageURL) => {
   conversation = null;
   logFile = ``;
   time = new Date();
-
-  
 
   // Retrieve the username element and wait until it's available
   username = document.querySelector(`[data-testid='profile-button']`);
