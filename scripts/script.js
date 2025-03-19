@@ -20,8 +20,11 @@ let username;
 let conversation;
 let body;
 
-// Global counter for the number of queries made
-let queryCount = 0;
+// Global counter for the number of queries made and other query info
+let queryCount = 3;
+let totalQueryLength = 0;
+let totalResponseLength = 0;
+let responseCount = 0;
 
 // Utility to create delays
 const PAUSE_SCRIPT = (delayTime) => new Promise((resolve) => setTimeout(resolve, delayTime));
@@ -88,25 +91,27 @@ function createQueryCounter() {
 
     // Create text for "Last Query Length: ___"
     const lastQueryLength = document.createElement("p");
-    lastQueryLength.innerText = "Last Query Length: ________________";
+    lastQueryLength.innerText = "Last Query Length: 0";
+    lastQueryLength.id = "lastQueryLengthDisplay"; // for dynamic updates
     counterDiv.appendChild(lastQueryLength);
     counterDiv.appendChild(document.createElement("br"));
 
     // Create text for "Last Response Length: ___"
     const lastResponseLength = document.createElement("p");
-    lastResponseLength.innerText = "Last Response Length: ____________";
+    lastResponseLength.innerText = "Last Response Length: 0";
+    lastResponseLength.id = "lastResponseLengthDisplay"; // for dynamic updates
     counterDiv.appendChild(lastResponseLength);
     counterDiv.appendChild(document.createElement("br"));
 
     // Create text for "Total Query Length: ___"
     const totalQueryLength = document.createElement("p");
-    totalQueryLength.innerText = "Total Query Length: _______________";
+    totalQueryLength.innerText = "Total Query Length: 0";
     counterDiv.appendChild(totalQueryLength);
     counterDiv.appendChild(document.createElement("br"));
 
     // Create text for "Average Response Length: ___"
     const avgResponseLength = document.createElement("p");
-    avgResponseLength.innerText = "Average Response Length: _________";
+    avgResponseLength.innerText = "Average Response Length: 0";
     counterDiv.appendChild(avgResponseLength);
 
     document.body.appendChild(counterDiv);
@@ -167,14 +172,33 @@ chrome.runtime.onConnect.addListener((port) => {
       // Log the timestamp and username
       time = new Date();
       logFile += '\n\n\n' + TIME_CONVERTER.format(time) + '\n\nUsername: ' + username;
+
     } else if (msg.promptComplete) {
       // Wait for a brief delay before logging the conversation
       await PAUSE_SCRIPT(300);
       conversation = document.querySelectorAll(MESSAGE_ROLE_SELECTOR);
       let prompt = conversation[conversation.length - 2].innerText;
       let newMessage = conversation[conversation.length - 1].innerText;
+
+      // log the conversation details
       logFile += '\n\nUser Query: \n' + prompt + '\n\nChatGPT Response: \n' + newMessage;
       console.log(logFile);
+
+      // Calculate word counts using the countWords function
+      const promptWordCount = countWords(prompt);
+      const newMessageWordCount = countWords(newMessage);
+
+      // Update the dashboard elements with the word counts
+      const lastQueryLengthDisplay = document.getElementById("lastQueryLengthDisplay");
+      if (lastQueryLengthDisplay) {
+        lastQueryLengthDisplay.innerText = "Last Query Length (words): " + promptWordCount;
+      }
+
+      const lastResponseLengthDisplay = document.getElementById("lastResponseLengthDisplay");
+      if (lastResponseLengthDisplay) {
+        lastResponseLengthDisplay.innerText = "Last Response Length (words): " + newMessageWordCount;
+      }
+
     } else if (msg.newConvo || msg.existingConvo) {
       // Reinitialize the extension for new or existing conversations
       await START_FUNC(window.document.URL);
@@ -228,3 +252,11 @@ const START_FUNC = async (pageURL) => {
   }
   console.log(logFile);
 };
+
+
+// Helper function to count words in a given string.
+function countWords(text) {
+  if (!text) return 0;
+  // Trims any extra spaces and split by one or more whitespace characters.
+  return text.trim().split(/\s+/).filter(word => word.length > 0).length;
+}
