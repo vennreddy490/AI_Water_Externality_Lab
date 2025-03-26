@@ -7,6 +7,18 @@ let conversationURL;
 // Utility function to create a delay
 const delay = (delayTime) => new Promise((resolve, reject) => setTimeout(() => resolve(), delayTime));
 
+
+chrome.action.onClicked.addListener((tab) => {
+    chrome.scripting.executeScript({
+      target: { tabId: tab.id },
+      function: () => {
+        // Send message directly to content script
+        chrome.runtime.sendMessage({ action: "toggleCounter" });
+      }
+    });
+  });
+
+
 // Listener for messages sent from content scripts
 chrome.runtime.onMessage.addListener(
     async (request, sender, sendResponse) => {
@@ -72,5 +84,7 @@ chrome.runtime.onMessage.addListener(
             }, 
             { urls: ["https://chatgpt.com/backend-api/*/r"] } // Target API endpoint for prompt responses
         );
+
+        
     }
 );

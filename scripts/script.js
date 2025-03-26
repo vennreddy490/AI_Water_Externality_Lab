@@ -126,38 +126,31 @@ function createQueryCounter() {
   }
 }
 
-//this is the button which opens the dashboard
 
-function createWaterButton() {
-  const button = document.createElement("button");
-  button.innerText = "Query Counter";
-
-  button.style.position = "fixed"; // Fix the position on the screen
-  button.style.top = "10px"; // Adjust as needed to place it at the top
-  button.style.right = "250px"; // Align to the right
-  button.style.padding = "10px 15px";
-  button.style.fontSize = "14px";
-  button.style.cursor = "pointer";
-  button.style.border = "1px solid #ccc";
-  button.style.borderRadius = "5px";
-  button.style.backgroundColor = "#008CBA";
-  button.style.color = "white";
-  button.style.zIndex = "10000"; 
-
-  button.addEventListener("click", () => {
-      createQueryCounter();
-  });
-
-  // Append the button to the body (or any other element you prefer)
-  document.body.appendChild(button);
+// Function to toggle the query counter visibility
+function toggleQueryCounter() {
+  const counterDiv = document.getElementById("myExtensionCounter");
+  if (counterDiv) {
+    // If exists, just toggle visibility
+    counterDiv.style.display = counterDiv.style.display === "none" ? "block" : "none";
+  } else {
+    // If doesn't exist, create it fresh
+    createQueryCounter();
+  }
 }
 
+// Listen for messages from the background script to toggle the query counter
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.action === "toggleCounter") {
+    toggleQueryCounter();
+  }
+});
 
 // Event listener for the window load event
 window.addEventListener('load', async (e) => {
-  createWaterButton();
+  createQueryCounter()
   // Notify the background script that the page has loaded
-  await chrome.runtime.sendMessage({});
+  await chrome.runtime.sendMessage({openDashboard: true});
   // Initialize the extension functionality
   await START_FUNC(window.document.URL);
 });

@@ -3,7 +3,7 @@
     "description": "Test Extension SRT",
     "version": "1.0",
     "manifest_version": 3,
-    "permissions": ["webRequest"],
+    "permissions": ["webRequest","scripting"],
     "action": {
         "default_icon": "images/icon.png"
     },
