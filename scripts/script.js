@@ -31,6 +31,20 @@ let username;
 let conversation;
 let body;
 
+//TODO: I don't think this matters that it's above the pause script
+// Generate or retrieve a persistent user ID using localStorage
+function getPersistentUserId() {
+  let uid = localStorage.getItem("myExtensionUserId");
+  if (!uid) {
+    uid = crypto.randomUUID(); // modern browsers support this natively
+    localStorage.setItem("myExtensionUserId", uid);
+  }
+  return uid;
+}
+
+// Global variable to hold the persistent user id
+let persistentUserId;
+
 // Utility to create delays
 const PAUSE_SCRIPT = (delayTime) => new Promise((resolve) => setTimeout(resolve, delayTime));
 
@@ -46,24 +60,31 @@ function storeCountersData() {
     const db = event.target.result;
     // Create the 'stats' object store if it doesn't already exist.
     if (!db.objectStoreNames.contains('stats')) {
-      db.createObjectStore('stats', { keyPath: 'id', autoIncrement: true });
+      // db.createObjectStore('stats', { keyPath: 'id ', autoIncrement: true });
+      db.createObjectStore('stats', { keyPath: 'queryID', autoIncrement: true });
     }
   };
 
   request.onsuccess = function(event) {
     const db = event.target.result;
     // Start a transaction to add a record to the 'stats' store.
+    //! IN PRODUCTION, WILL JUST BE "queries"
     const transaction = db.transaction('stats', 'readwrite');
     const store = transaction.objectStore('stats');
 
+
     const record = {
-      queryCount: persistentCounters.queryCount,
-      lastQueryLength: persistentCounters.lastQueryLength,
-      lastResponseLength: persistentCounters.lastResponseLength,
-      averageQueryLength: persistentCounters.averageQueryLength,
-      averageResponseLength: persistentCounters.averageResponseLength,
-      created: Date.now()
+      persistentUserId: persistentUserId,
+      query_length: persistentCounters.lastQueryLength,
+      response_length: persistentCounters.lastResponseLength,
+      time_created: Date.now()
+      // queryCount: persistentCounters.queryCount,
+      // averageQueryLength: persistentCounters.averageQueryLength,
+      // averageResponseLength: persistentCounters.averageResponseLength,
     };
+    console.log("The userID is: ")
+    console.log(persistentUserId)
+
 
     const addRequest = store.add(record);
 
@@ -202,6 +223,10 @@ function createWaterButton() {
 
 // Event listener for the window load event
 window.addEventListener('load', async (e) => {
+  // Initialize the persistent user id
+  persistentUserId = getPersistentUserId();
+  console.log("Persistent User ID:", persistentUserId);
+
   createWaterButton();
   // Notify the background script that the page has loaded
   await chrome.runtime.sendMessage({});
