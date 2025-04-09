@@ -140,7 +140,7 @@ function createWaterButton() {
   button.style.cursor = "pointer";
   button.style.border = "1px solid #ccc";
   button.style.borderRadius = "5px";
-  button.style.backgroundColor = "#008CBA";
+  button.style.backgroundColor = "#0FFCBA";
   button.style.color = "white";
   button.style.zIndex = "10000"; 
 
@@ -218,6 +218,25 @@ chrome.runtime.onConnect.addListener((port) => {
       if (averageResponseLengthDisplay) {
         averageResponseLengthDisplay.innerText = "Average Response Length: " + persistentCounters.averageResponseLength;
       }
+
+      // // Testing data stroage
+      // chrome.storage.local.set({ myData: persistentCounters }, () => {
+      //   console.log('Data saved to chrome.storage');
+      // });
+
+      // chrome.storage.local.set({ "AVERAGE_QUERY_LENGTH": persistentCounters.averageQueryLength }).then(() => {
+      //   console.log("Value is set");
+      // });
+
+      // localStorage.setItem('TESTING_VALUE_4_PLEASE', 'WOULD IT NOT BE AWESOME IF THIS WORKED')
+
+      // Testing it over everything in local Storage
+      localStorage.setItem('LAST_QUERY_LENGTH', persistentCounters.lastQueryLength)
+      localStorage.setItem('LAST_RESPONSE_LENGTH', persistentCounters.lastResponseLength)
+      localStorage.setItem('AVERAGE_QUERY_LENGTH', persistentCounters.averageQueryLength)
+      localStorage.setItem('AVERAGE_RESPONSE_LENGTH', persistentCounters.averageResponseLength)
+
+    
 
     } else if (msg.newConvo || msg.existingConvo) {
       // Reinitialize the extension for new or existing conversations
