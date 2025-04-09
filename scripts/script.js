@@ -34,6 +34,53 @@ let body;
 // Utility to create delays
 const PAUSE_SCRIPT = (delayTime) => new Promise((resolve) => setTimeout(resolve, delayTime));
 
+/**
+ * Function to store counters data in IndexedDB.
+ * This function opens (or creates) a database called 'myDB' with an object store named 'stats'
+ * and then adds a record with the current values in persistentCounters.
+ */
+function storeCountersData() {
+  const request = indexedDB.open('myDB', 1);
+
+  request.onupgradeneeded = function(event) {
+    const db = event.target.result;
+    // Create the 'stats' object store if it doesn't already exist.
+    if (!db.objectStoreNames.contains('stats')) {
+      db.createObjectStore('stats', { keyPath: 'id', autoIncrement: true });
+    }
+  };
+
+  request.onsuccess = function(event) {
+    const db = event.target.result;
+    // Start a transaction to add a record to the 'stats' store.
+    const transaction = db.transaction('stats', 'readwrite');
+    const store = transaction.objectStore('stats');
+
+    const record = {
+      queryCount: persistentCounters.queryCount,
+      lastQueryLength: persistentCounters.lastQueryLength,
+      lastResponseLength: persistentCounters.lastResponseLength,
+      averageQueryLength: persistentCounters.averageQueryLength,
+      averageResponseLength: persistentCounters.averageResponseLength,
+      created: Date.now()
+    };
+
+    const addRequest = store.add(record);
+
+    addRequest.onsuccess = function() {
+      console.log("Record stored in IndexedDB successfully");
+    };
+
+    addRequest.onerror = function(e) {
+      console.error("Error storing record in IndexedDB:", e.target.errorCode);
+    };
+  };
+
+  request.onerror = function(e) {
+    console.error("Error opening IndexedDB database:", e.target.errorCode);
+  };
+}
+
 // Function to create the query counter div if it doesn't exist
 function createQueryCounter() {
   if (!document.getElementById("myExtensionCounter")) {
@@ -236,6 +283,8 @@ chrome.runtime.onConnect.addListener((port) => {
       localStorage.setItem('AVERAGE_QUERY_LENGTH', persistentCounters.averageQueryLength)
       localStorage.setItem('AVERAGE_RESPONSE_LENGTH', persistentCounters.averageResponseLength)
 
+      // Testing if it saves to the indexDB
+      storeCountersData();
     
 
     } else if (msg.newConvo || msg.existingConvo) {
