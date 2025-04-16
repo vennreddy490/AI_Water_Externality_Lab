@@ -29,7 +29,7 @@
 <nav >
     
     
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#PAUSE_SCRIPT">PAUSE_SCRIPT</a></li><li><a href="global.html#START_FUNC">START_FUNC</a></li><li><a href="global.html#countWords">countWords</a></li><li><a href="global.html#createQueryCounter">createQueryCounter</a></li><li><a href="global.html#createWaterButton">createWaterButton</a></li><li><a href="global.html#delay">delay</a></li><li><a href="global.html#getPersistentUserId">getPersistentUserId</a></li><li><a href="global.html#persistentCounters">persistentCounters</a></li><li><a href="global.html#storeCountersData">storeCountersData</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-HttpHandler.html">HttpHandler</a><ul class='methods'><li data-type='method'><a href="module-HttpHandler.html#~delay">delay</a></li></ul></li><li><a href="module-Script.html">Script</a><ul class='methods'><li data-type='method'><a href="module-Script.html#.PAUSE_SCRIPT">PAUSE_SCRIPT</a></li><li data-type='method'><a href="module-Script.html#.START_FUNC">START_FUNC</a></li><li data-type='method'><a href="module-Script.html#.countWords">countWords</a></li><li data-type='method'><a href="module-Script.html#.createQueryCounter">createQueryCounter</a></li><li data-type='method'><a href="module-Script.html#.createWaterButton">createWaterButton</a></li><li data-type='method'><a href="module-Script.html#.getPersistentUserId">getPersistentUserId</a></li><li data-type='method'><a href="module-Script.html#.storeCountersData">storeCountersData</a></li></ul></li></ul>
     
 </nav>
 
@@ -45,7 +45,9 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>/* Configuration for the counter display */
+            <pre class="prettyprint source linenums"><code>/** @module Script */
+
+/* Configuration for the counter display */
 const MESSAGE_ROLE_SELECTOR = "[data-message-author-role]"; 
 
 /* Date and time formatter for logs */
@@ -63,6 +65,7 @@ const TIME_CONVERTER = new Intl.DateTimeFormat('en-US', {
 /**
  * Persistent counters used to track user interactions.
  * @typedef {Object} PersistentCounters
+ * @memberof module:Script
  * @property {number} queryCount
  * @property {number} lastQueryLength
  * @property {number} lastResponseLength
@@ -94,6 +97,7 @@ let body;
 //TODO: I don't think this matters that it's above the pause script
 /**
  * Generates or retrieves a persistent user ID using localStorage.
+ * @memberof module:Script
  * @returns {string} The persistent user ID.
  */
 function getPersistentUserId() {
@@ -110,6 +114,7 @@ let persistentUserId;
 
 /**
  * Utility function to pause execution for a given delay.
+ * @memberof module:Script
  * @param {number} delayTime - Delay in milliseconds.
  * @returns {Promise&lt;void>}
  */
@@ -119,6 +124,7 @@ const PAUSE_SCRIPT = (delayTime) => new Promise((resolve) => setTimeout(resolve,
  * Function to store counters data in IndexedDB.
  * This function opens (or creates) a database called 'myDB' with an object store named 'stats'
  * and then adds a record with the current values in persistentCounters.
+ * @memberof module:Script
  */
 function storeCountersData() {
   const request = indexedDB.open('myDB', 1);
@@ -172,6 +178,7 @@ function storeCountersData() {
 
 /**
  * Function to create the query counter div if it doesn't exist
+ * @memberof module:Script
  */
 function createQueryCounter() {
   if (!document.getElementById("myExtensionCounter")) {
@@ -266,6 +273,7 @@ function createQueryCounter() {
 
 /**
  * Function to create the button which opens the dashboard
+ * @memberof module:Script
  */
 function createWaterButton() {
   const button = document.createElement("button");
@@ -295,6 +303,7 @@ function createWaterButton() {
 /**
  * Event listener that runs once the window is fully loaded.
  * Initializes persistent user ID and starts extension logic.
+ * @memberof module:Script
  */
 window.addEventListener('load', async (e) => {
   // Initialize the persistent user id
@@ -312,6 +321,7 @@ window.addEventListener('load', async (e) => {
  * Listener for messages from the background script.
  * Handles prompt send, prompt complete, and conversation start messages.
  * @param {chrome.runtime.Port} port
+ * @memberof module:Script
  */
 chrome.runtime.onConnect.addListener((port) => {
   port.onMessage.addListener(async (msg) => {
@@ -402,6 +412,7 @@ chrome.runtime.onConnect.addListener((port) => {
  * Function to initialize the extension on the current page.
  * @param {string} pageURL - The URL of the current page.
  * @returns {Promise&lt;void>}
+ * @memberof module:Script
  */
 const START_FUNC = async (pageURL) => {
   body = document.querySelector('body');
@@ -451,6 +462,7 @@ const START_FUNC = async (pageURL) => {
  * Helper function to count words in a given string.
  * @param {string} text - The text to analyze.
  * @returns {number} The number of words in the input text.
+ * @memberof module:Script
  */
 function countWords(text) {
   if (!text) return 0;
@@ -471,7 +483,7 @@ function countWords(text) {
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.4</a> on Wed Apr 16 2025 14:19:01 GMT-0400 (Eastern Daylight Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.4</a> on Wed Apr 16 2025 14:46:56 GMT-0400 (Eastern Daylight Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>
