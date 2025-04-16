@@ -18,6 +18,7 @@ const TIME_CONVERTER = new Intl.DateTimeFormat('en-US', {
 /**
  * Persistent counters used to track user interactions.
  * @typedef {Object} PersistentCounters
+ * @memberof module:Script
  * @property {number} queryCount
  * @property {number} lastQueryLength
  * @property {number} lastResponseLength
@@ -49,6 +50,7 @@ let body;
 //TODO: I don't think this matters that it's above the pause script
 /**
  * Generates or retrieves a persistent user ID using localStorage.
+ * @memberof module:Script
  * @returns {string} The persistent user ID.
  */
 function getPersistentUserId() {
@@ -65,6 +67,7 @@ let persistentUserId;
 
 /**
  * Utility function to pause execution for a given delay.
+ * @memberof module:Script
  * @param {number} delayTime - Delay in milliseconds.
  * @returns {Promise<void>}
  */
@@ -74,6 +77,7 @@ const PAUSE_SCRIPT = (delayTime) => new Promise((resolve) => setTimeout(resolve,
  * Function to store counters data in IndexedDB.
  * This function opens (or creates) a database called 'myDB' with an object store named 'stats'
  * and then adds a record with the current values in persistentCounters.
+ * @memberof module:Script
  */
 function storeCountersData() {
   const request = indexedDB.open('myDB', 1);
@@ -127,6 +131,7 @@ function storeCountersData() {
 
 /**
  * Function to create the query counter div if it doesn't exist
+ * @memberof module:Script
  */
 function createQueryCounter() {
   if (!document.getElementById("myExtensionCounter")) {
@@ -221,6 +226,7 @@ function createQueryCounter() {
 
 /**
  * Function to create the button which opens the dashboard
+ * @memberof module:Script
  */
 function createWaterButton() {
   const button = document.createElement("button");
@@ -250,6 +256,7 @@ function createWaterButton() {
 /**
  * Event listener that runs once the window is fully loaded.
  * Initializes persistent user ID and starts extension logic.
+ * @memberof module:Script
  */
 window.addEventListener('load', async (e) => {
   // Initialize the persistent user id
@@ -267,6 +274,7 @@ window.addEventListener('load', async (e) => {
  * Listener for messages from the background script.
  * Handles prompt send, prompt complete, and conversation start messages.
  * @param {chrome.runtime.Port} port
+ * @memberof module:Script
  */
 chrome.runtime.onConnect.addListener((port) => {
   port.onMessage.addListener(async (msg) => {
@@ -357,6 +365,7 @@ chrome.runtime.onConnect.addListener((port) => {
  * Function to initialize the extension on the current page.
  * @param {string} pageURL - The URL of the current page.
  * @returns {Promise<void>}
+ * @memberof module:Script
  */
 const START_FUNC = async (pageURL) => {
   body = document.querySelector('body');
@@ -406,6 +415,7 @@ const START_FUNC = async (pageURL) => {
  * Helper function to count words in a given string.
  * @param {string} text - The text to analyze.
  * @returns {number} The number of words in the input text.
+ * @memberof module:Script
  */
 function countWords(text) {
   if (!text) return 0;
