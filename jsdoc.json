@@ -17,7 +17,8 @@
       "destination": "./docs",
       "recurse": true,
       "readme": "./README.md",
-      "verbose": false
+      "verbose": false,
+      "template": "./docdash"
     }
   }
   
