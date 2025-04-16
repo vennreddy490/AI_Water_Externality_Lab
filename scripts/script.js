@@ -13,6 +13,19 @@ const TIME_CONVERTER = new Intl.DateTimeFormat('en-US', {
   second: "numeric"
 });
 
+/**
+ * Persistent counters used to track user interactions.
+ * @typedef {Object} PersistentCounters
+ * @property {number} queryCount
+ * @property {number} lastQueryLength
+ * @property {number} lastResponseLength
+ * @property {number} averageQueryLength
+ * @property {number} averageResponseLength
+ * @property {number} totalQueryLength
+ * @property {number} totalResponseLength
+ */
+
+/** @type {PersistentCounters} */
 // Persistent Variables
 const persistentCounters = {
   queryCount: 0,
@@ -32,7 +45,10 @@ let conversation;
 let body;
 
 //TODO: I don't think this matters that it's above the pause script
-// Generate or retrieve a persistent user ID using localStorage
+/**
+ * Generates or retrieves a persistent user ID using localStorage.
+ * @returns {string} The persistent user ID.
+ */
 function getPersistentUserId() {
   let uid = localStorage.getItem("myExtensionUserId");
   if (!uid) {
@@ -45,7 +61,11 @@ function getPersistentUserId() {
 // Global variable to hold the persistent user id
 let persistentUserId;
 
-// Utility to create delays
+/**
+ * Utility function to pause execution for a given delay.
+ * @param {number} delayTime - Delay in milliseconds.
+ * @returns {Promise<void>}
+ */
 const PAUSE_SCRIPT = (delayTime) => new Promise((resolve) => setTimeout(resolve, delayTime));
 
 /**
@@ -225,7 +245,10 @@ function createWaterButton() {
 }
 
 
-// Event listener for the window load event
+/**
+ * Event listener that runs once the window is fully loaded.
+ * Initializes persistent user ID and starts extension logic.
+ */
 window.addEventListener('load', async (e) => {
   // Initialize the persistent user id
   persistentUserId = getPersistentUserId();
@@ -238,7 +261,11 @@ window.addEventListener('load', async (e) => {
   await START_FUNC(window.document.URL);
 });
 
-// Listener for messages from the background script
+/**
+ * Listener for messages from the background script.
+ * Handles prompt send, prompt complete, and conversation start messages.
+ * @param {chrome.runtime.Port} port
+ */
 chrome.runtime.onConnect.addListener((port) => {
   port.onMessage.addListener(async (msg) => {
     if (msg.sentPrompt) {
@@ -325,8 +352,9 @@ chrome.runtime.onConnect.addListener((port) => {
 
 
 /**
- * Function to initialize the extension on the current page
- * @param {*} pageURL - test documenation
+ * Function to initialize the extension on the current page.
+ * @param {string} pageURL - The URL of the current page.
+ * @returns {Promise<void>}
  */
 const START_FUNC = async (pageURL) => {
   body = document.querySelector('body');
@@ -372,8 +400,11 @@ const START_FUNC = async (pageURL) => {
   console.log(logFile);
 };
 
-
-// Helper function to count words in a given string.
+/**
+ * Helper function to count words in a given string.
+ * @param {string} text - The text to analyze.
+ * @returns {number} The number of words in the input text.
+ */
 function countWords(text) {
   if (!text) return 0;
   // Trims any extra spaces and split by one or more whitespace characters.
