@@ -1,3 +1,5 @@
+/** @module Script */
+
 /* Configuration for the counter display */
 const MESSAGE_ROLE_SELECTOR = "[data-message-author-role]"; 
 

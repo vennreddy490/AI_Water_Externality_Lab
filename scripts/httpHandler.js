@@ -1,3 +1,5 @@
+/** @module HttpHandler */
+
 // Variable to store the timestamp of the last request
 let previousTimeStamp = 0;
 
