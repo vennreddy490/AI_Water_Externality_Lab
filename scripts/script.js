@@ -140,10 +140,9 @@ function createQueryCounter() {
     counterDiv.style.height = "400px"; // Leaves 100px at bottom
     counterDiv.style.width = "250px"; // Optional: set a width if needed
     counterDiv.style.zIndex = "999999";
-    counterDiv.style.background = "#ADD8E6"; // Light light blue background
-    counterDiv.style.color = "black";
+    counterDiv.style.background = "#1C2541"; // Light light blue background
+    counterDiv.style.color = "#C1D9F0";
     counterDiv.style.padding = "10px";
-    counterDiv.style.border = "2px solid black";
     counterDiv.style.borderRadius = "10px"; // Curved borders
     counterDiv.style.fontSize = "14px";
     counterDiv.style.cursor = "default";
@@ -153,7 +152,7 @@ function createQueryCounter() {
     closeButton.innerText = "X";
     closeButton.style.position = "absolute";
     closeButton.style.top = "5px";
-    closeButton.style.right = "10px";
+    closeButton.style.left = "10px";
     closeButton.style.background = "red";
     closeButton.style.color = "white";
     closeButton.style.border = "none";
@@ -169,52 +168,117 @@ function createQueryCounter() {
 
     counterDiv.appendChild(closeButton);
 
-    // Create a header that says "Display Info"
-    const header = document.createElement("h2");
+    const progressRectangle = document.createElement("div");
+    progressRectangle.style.position = "absolute";
+    progressRectangle.style.bottom = "0px"; // Position at the bottom
+    progressRectangle.style.right = "0px";
+    progressRectangle.style.width = "15%";
+    progressRectangle.style.height = "100%"; // Height of the progress bar
+    progressRectangle.style.backgroundColor = "white"; // blue background
+
+    counterDiv.appendChild(progressRectangle);
+
+    // Create progress bar
+    const progressBar = document.createElement("div");
+    progressBar.id = "progressBar";
+    progressBar.style.position = "absolute";
+    progressBar.style.bottom = "0px"; // Position at the bottom
+    progressBar.style.right = "0px";
+    progressBar.style.width = "15%";
+    progressBar.style.height = "0px"; // Height of the progress bar
+    progressBar.style.backgroundColor = "blue"; // blue background
+    
+    counterDiv.appendChild(progressBar);
+
+    
+
+    // Create text for "Bottles Equivalent"
+    const bottlesDisplay = document.createElement("p");
+    bottlesDisplay.innerText = "Bottles: 0";
+    bottlesDisplay.id = "bottlesDisplay"; // For dynamic updates
+    bottlesDisplay.style.position = "absolute";
+    bottlesDisplay.style.bottom = "0px";
+    bottlesDisplay.style.left = "10px"
+    bottlesDisplay.style.margin = "10px 0";
+    counterDiv.appendChild(bottlesDisplay);
+
+    // Create text for "Volume of Water"
+    const volume = document.createElement("p");
+    volume.innerText = "Volume: 0 fl oz";
+    volume.id = "volumeDisplay"; // For dynamic updates
+    volume.style.position = "absolute";
+    volume.style.bottom = "0px";
+    volume.style.right = "50px"
+    volume.style.margin = "10px 0";
+    counterDiv.appendChild(volume);
+
+
+
+    // Create image element for the droplet image
+    const imageElement = document.createElement("img");
+    imageElement.id = "bottleImage";
+    imageElement.style.position = "absolute";
+    imageElement.style.top = "10px"; // Adjust image position as needed
+    imageElement.style.left = "50%";
+    imageElement.style.transform = "translateX(-50%)"; // Center the image
+
+    // Set the initial image (droplet)
+    imageElement.src = "images/imagesrc.png"; // Replace with your droplet image path
+    imageElement.alt = "Water Droplet";
+
+    counterDiv.appendChild(imageElement);
+
+
+    // You can uncomment the function to add/change the header text
+
+    /* const header = document.createElement("h2");
     header.innerText = "Display Info";
     header.style.textAlign = "center";
     header.style.margin = "0 0 10px 0"; // margin bottom for spacing
     counterDiv.appendChild(header);
-    counterDiv.appendChild(document.createElement("br"));
+    counterDiv.appendChild(document.createElement("br")); */
 
-    // Create centered text for "Queries: __"
-    const queriesDisplay = document.createElement("p");
+    // You can uncomment the function to: Create centered text for "Queries: __"
+   
+    /* const queriesDisplay = document.createElement("p");
     queriesDisplay.innerText = "Queries Made: " + persistentCounters.queryCount;
     queriesDisplay.style.textAlign = "center";
     queriesDisplay.style.margin = "10px 0";
     queriesDisplay.id = "queryCountDisplay"; // For dynamic updates
     counterDiv.appendChild(queriesDisplay);
-    counterDiv.appendChild(document.createElement("br"));
+    counterDiv.appendChild(document.createElement("br")); */
 
-    // Create text for "Last Query Length: ___"
-    const lastQueryLengthDisplay = document.createElement("p");
+    // You can uncomment the fucntion to: Create text for "Last Query Length: ___"
+    /* const lastQueryLengthDisplay = document.createElement("p");
     lastQueryLengthDisplay.innerText = "Last Query Length: " + persistentCounters.lastQueryLength;
     lastQueryLengthDisplay.id = "lastQueryLengthDisplay"; // for dynamic updates
     counterDiv.appendChild(lastQueryLengthDisplay);
-    counterDiv.appendChild(document.createElement("br"));
+    counterDiv.appendChild(document.createElement("br")); */
 
-    // Create text for "Last Response Length: ___"
-    const lastResponseLengthDisplay = document.createElement("p");
+    // You can uncomment the function to: Create text for "Last Response Length: ___"
+    /* const lastResponseLengthDisplay = document.createElement("p");
     lastResponseLengthDisplay.innerText = "Last Response Length: " + persistentCounters.lastResponseLength;
     lastResponseLengthDisplay.id = "lastResponseLengthDisplay"; // for dynamic updates
     counterDiv.appendChild(lastResponseLengthDisplay);
-    counterDiv.appendChild(document.createElement("br"));
+    counterDiv.appendChild(document.createElement("br")); */
 
 
-    // Create text for "Average Query Length: ____"
-    const averageQueryLengthDisplay = document.createElement("p");
+    // You can uncomment the function to: Create text for "Average Query Length: ____"
+    /* const averageQueryLengthDisplay = document.createElement("p");
     averageQueryLengthDisplay.innerText = "Average Query Length: " + persistentCounters.averageQueryLength;
     averageQueryLengthDisplay.id = "averageQueryLengthDisplay"; // for dynamic updates
     counterDiv.appendChild(averageQueryLengthDisplay);
-    counterDiv.appendChild(document.createElement("br"));
+    counterDiv.appendChild(document.createElement("br")); */
 
 
-    // Create text for "Average Response Length: ___"
-    const averageResponseLengthDisplay = document.createElement("p");
+    // You can uncomment the function to: Create text for "Average Response Length: ___"
+    /* const averageResponseLengthDisplay = document.createElement("p");
     averageResponseLengthDisplay.innerText = "Average Response Length: " + persistentCounters.averageResponseLength;
     averageResponseLengthDisplay.id = "averageResponseLengthDisplay"; // for dynamic updates
-    counterDiv.appendChild(averageResponseLengthDisplay);
+    counterDiv.appendChild(averageResponseLengthDisplay); */
 
+
+    
     document.body.appendChild(counterDiv);
   }
 }
@@ -234,8 +298,8 @@ function createWaterButton() {
   button.style.cursor = "pointer";
   button.style.border = "1px solid #ccc";
   button.style.borderRadius = "5px";
-  button.style.backgroundColor = "#0FFCBA";
-  button.style.color = "white";
+  button.style.backgroundColor = "#0D1B2A"; // Dark blue background
+  button.style.color = "#C1D9F0";
   button.style.zIndex = "10000"; 
 
   button.addEventListener("click", () => {
@@ -277,7 +341,41 @@ chrome.runtime.onConnect.addListener((port) => {
       if (queryCountDisplay) {
         queryCountDisplay.innerText = "Queries Made: " + persistentCounters.queryCount;
       }
+
+      const progressBar = document.getElementById("progressBar");
+      if (progressBar){
+        const wordsPerBottle = 100; // 100 words per 16 fl oz bottle
+        const maxBottles = 10; // You can set a visual goal (like 10 bottles = full bar)
+        const maxWords = wordsPerBottle * maxBottles; // 1000 words in total = full bar
+
+        const wordCount = persistentCounters.totalResponseLength || 0;
+        const progress = Math.min(wordCount / maxWords, 1); // cap at 1 (100%)
+
+        const height = progress * 100;
+        progressBar.style.height = `${height}%`;
+        progressBar.style.backgroundColor = "rgba(0, 123, 255, 0.8)"; // Nice water-like blue
+        progressBar.style.transition = "height 0.3s ease";
+      }
+
+      const bottlesDisplay = document.getElementById("bottlesDisplay");
+      if (bottlesDisplay) {
+        const wordsPerBottle = 100; // 100 words per 16 fl oz bottle
+        const bottleCount = Math.floor(persistentCounters.totalResponseLength / wordsPerBottle);
+        bottlesDisplay.innerText = "Bottles: " + bottleCount;
+      }
       
+      const imageElement = document.getElementById("bottleImage");
+      if (imageElement) {
+        const wordsPerBottle = 100; // 100 words per 16 fl oz bottle
+        const bottleCount = Math.floor(persistentCounters.totalResponseLength / wordsPerBottle);
+
+        // Check if the image needs to be updated
+        const newImageSrc = `images/image${bottleCount}.png`; // Replace with your bottle image path
+        if (imageElement.src !== newImageSrc) {
+          imageElement.src = newImageSrc;
+        }
+      }
+
       // Log the timestamp and username
       time = new Date();
       logFile += '\n\n\n' + TIME_CONVERTER.format(time) + '\n\nUsername: ' + username;
